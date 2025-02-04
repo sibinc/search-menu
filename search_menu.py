@@ -8,7 +8,11 @@ from config.settings import SEARCH_CONFIG, COLORS
 from services.menu_service import MenuService
 from services.storage_service import MenuStorage
 
-logger = logging.getLogger(__name__)
+from utils.logger import setup_logging, get_logger
+
+# Initialize logger at startup
+setup_logging()
+logger = get_logger()
 
 class SearchEngineError(Exception):
     """Base exception for search engine errors"""
@@ -182,4 +186,11 @@ def main():
         print(f"{COLORS['RED']}Failed to initialize search engine. Please check the logs.{COLORS['RESET']}")
 
 if __name__ == "__main__":
-    main()
+    try:
+        logger.info("=== Search Menu Application Starting ===")
+        logger.info(f"Application started at {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
+        logger.info(f"Current user: {os.getenv('USER', 'unknown')}")
+        main()
+    except Exception as e:
+        logger.error(f"Application error: {str(e)}", exc_info=True)
+        raise

@@ -2,7 +2,9 @@
 from typing import Dict, List, Any
 import logging
 
-logger = logging.getLogger(__name__)
+from utils.logger import get_logger
+
+logger = get_logger()
 
 class SmartQueryEnhancer:
     def __init__(self):

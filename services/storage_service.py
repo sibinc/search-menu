@@ -6,8 +6,9 @@ from pathlib import Path
 import logging
 from models.menu import MenuItem
 from config.settings import DATA_DIR
+from utils.logger import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger()
 
 class StorageError(Exception):
     """Base exception for storage errors"""

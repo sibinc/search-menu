@@ -5,7 +5,9 @@ import logging
 from models.menu import MenuItem
 from services.storage_service import MenuStorage
 
-logger = logging.getLogger(__name__)
+from utils.logger import get_logger
+
+logger = get_logger()
 
 class MenuServiceError(Exception):
     """Base exception for menu service errors"""

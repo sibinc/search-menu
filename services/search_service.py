@@ -8,8 +8,9 @@ from ai.ml.ranker import AdaptiveRanker
 from services.menu_service import MenuService
 from services.storage_service import MenuStorage
 
-# Use the existing logging pattern
-logger = logging.getLogger(__name__)
+from utils.logger import get_logger
+
+logger = get_logger()
 
 class SearchService:
     def __init__(self):

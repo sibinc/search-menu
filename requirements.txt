@@ -1,9 +1,15 @@
-# requirements.txt
+# Core dependencies
 pydantic==2.5.2
 click==8.1.7
+
+# AI/ML dependencies
+torch>=1.13.0  # Updated to newer version
+transformers>=4.30.0  # Updated to newer version
 sentence-transformers==2.2.2
+huggingface-hub==0.16.4
+sentencepiece>=0.1.99
+scikit-learn>=1.0.2
+
+# Search dependencies
 faiss-cpu==1.7.4
 numpy==1.24.3
-torch>=1.6.0
-transformers>=4.6.0
-huggingface-hub==0.16.4

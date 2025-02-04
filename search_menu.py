@@ -106,7 +106,7 @@ class SearchEngine:
             for idx, similarity in enumerate(similarities):
                 if similarity > threshold:
                     menu = menus[indices[0][idx]]
-                    result = menu.dict()
+                    result = menu.model_dump()
                     result['matched_keywords'] = [
                         kw for kw in menu.keywords 
                         if kw.lower() in enhanced_query.lower()

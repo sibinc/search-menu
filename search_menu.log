@@ -1,0 +1,11 @@
+2025-02-04 07:24:09,602 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-02-04 07:24:09,602 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-02-04 07:24:15,179 - config - INFO - Model loaded successfully!
+2025-02-04 07:24:15,265 - config - INFO - Enhanced semantic embeddings stored in FAISS
+2025-02-04 07:24:29,453 - config - INFO - Search completed: 0 results found
+2025-02-04 07:24:39,570 - config - INFO - Search completed: 0 results found
+2025-02-04 07:24:47,239 - config - INFO - Search completed: 0 results found
+2025-02-04 07:24:48,887 - config - INFO - Search completed: 0 results found
+2025-02-04 07:24:49,758 - config - INFO - Search completed: 0 results found
+2025-02-04 07:25:23,140 - config - INFO - Search completed: 1 results found
+2025-02-04 07:25:36,427 - config - INFO - Search completed: 0 results found

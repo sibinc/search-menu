@@ -4,7 +4,7 @@ from datetime import datetime
 import os
 from typing import List, Tuple
 from models.menu import MenuItem
-from services.storage_service import MenuStorage
+from services.search_service import SearchService
 from utils.logger import get_logger
 
 logger = get_logger()
@@ -22,18 +22,9 @@ COLORS = {
 
 class MenuSearchCLI:
     def __init__(self):
-        self.storage = MenuStorage()
-        self._menus: List[MenuItem] = []
-        self._load_menus()
-
-    def _load_menus(self):
-        """Load all menus from storage"""
-        try:
-            self._menus = self.storage.load_menus()
-            logger.info(f"Loaded {len(self._menus)} menus")
-        except Exception as e:
-            logger.error(f"Failed to load menus: {e}")
-            raise Exception(f"Failed to load menus: {e}")
+        self.search_service = SearchService()
+        self.current_time = datetime.strptime("2025-02-05 02:29:27", "%Y-%m-%d %H:%M:%S")
+        self.current_user = "sibinc"
 
     def print_menu_result(self, score: float, menu: MenuItem):
         """Print a formatted menu search result"""
@@ -42,121 +33,147 @@ class MenuSearchCLI:
         print(f"{COLORS['CYAN']}Description:{COLORS['RESET']} {menu.description}")
         print(f"{COLORS['CYAN']}Category:{COLORS['RESET']} {menu.menu_details.category}/{menu.menu_details.subcategory}")
         print(f"{COLORS['CYAN']}URL:{COLORS['RESET']} {menu.url}")
-        print(f"{COLORS['CYAN']}Context:{COLORS['RESET']} {menu.menu_details.context}")
+        
+        # Print context if available
+        if menu.menu_details.context:
+            print(f"{COLORS['CYAN']}Context:{COLORS['RESET']} {menu.menu_details.context}")
+        
+        # Print related keywords if available
+        if menu.search_metadata.keywords:
+            print(f"{COLORS['CYAN']}Keywords:{COLORS['RESET']} {', '.join(menu.search_metadata.keywords)}")
+        
         print(f"{COLORS['YELLOW']}{'-' * 50}{COLORS['RESET']}")
 
-    def search(self, query: str) -> List[Tuple[float, MenuItem]]:
-        """Search menus with enhanced scoring"""
-        query = query.lower()
-        results = []
-
-        for menu in self._menus:
-            if not menu.menu_details.active:
-                continue
-
-            score = self._calculate_search_score(query, menu)
-            if score > 0:
-                results.append((score, menu))
-
-        results.sort(key=lambda x: (-x[0], x[1].menu_details.order))
-        return results
-
-    def _calculate_search_score(self, query: str, menu: MenuItem) -> float:
-        """Calculate search score for a menu"""
-        score = 0.0
-        
-        # Direct matches
-        if query in menu.name.lower():
-            score += 1.0
-        if query in menu.description.lower():
-            score += 0.8
-
-        # Primary terms matching
-        for term, synonyms in menu.query_enhancers.primary_terms.items():
-            if term.lower() in query or any(syn.lower() in query for syn in synonyms.split()):
-                score += 0.7
-
-        # Action terms matching
-        for action_type, terms in menu.query_enhancers.action_terms.items():
-            for term, synonyms in terms.items():
-                if term.lower() in query or any(syn.lower() in query for syn in synonyms.split()):
-                    score += 0.6
-
-        # Error tolerant terms matching
-        for error_type, variations in menu.query_enhancers.error_tolerant_terms.items():
-            for term, variants in variations.items():
-                if any(variant.lower() in query for variant in variants):
-                    score += 0.5
-
-        # Keywords matching
-        if any(kw.lower() in query for kw in menu.search_metadata.keywords):
-            score += 0.4
-
-        # Search phrases matching
-        all_phrases = (
-            menu.search_metadata.search_phrases.questions +
-            menu.search_metadata.search_phrases.commands
-        )
-        if any(phrase.lower() in query for phrase in all_phrases):
-            score += 0.4
-
-        # Regional variations matching
-        for variations in menu.search_metadata.search_phrases.regional_variations.values():
-            if any(var.lower() in query for var in variations):
-                score += 0.3
-
-        return score
-
-def main():
-    """Main CLI function"""
-    try:
+    def print_welcome_message(self):
+        """Print welcome message and usage instructions"""
         print(f"\n{COLORS['HEADER']}Welcome to Menu Search System!{COLORS['RESET']}")
-        print(f"Current Time (UTC): {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}")
-        print(f"Current User: {os.getenv('USER', 'sibinc')}\n")
+        print(f"Current Time (UTC): {self.current_time.strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"Current User: {self.current_user}\n")
         
-        searcher = MenuSearchCLI()
+        print(f"{COLORS['CYAN']}Available Commands:{COLORS['RESET']}")
+        print("1. search <query> - Search for menus")
+        print("2. categories - List all menu categories")
+        print("3. help - Show this help message")
+        print("4. quit - Exit the program")
         
-        print(f"{COLORS['CYAN']}Example queries:{COLORS['RESET']}")
+        print(f"\n{COLORS['CYAN']}Example queries:{COLORS['RESET']}")
         print("- how to check my exam results")
         print("- where can I find my semester marks")
         print("- show regular examination results")
         print("- view my academic performance")
         print(f"\nType 'quit' to exit\n")
 
-        while True:
-            try:
-                query = input(f"{COLORS['GREEN']}Enter your search query >{COLORS['RESET']} ").strip()
+    def print_categories(self):
+        """Print all available menu categories"""
+        categories = self.search_service.get_categories()
+        if not categories:
+            print(f"\n{COLORS['YELLOW']}No menu categories found.{COLORS['RESET']}\n")
+            return
+
+        print(f"\n{COLORS['BOLD']}Available Categories:{COLORS['RESET']}")
+        for category in categories:
+            menus = self.search_service.get_menus_by_category(category)
+            active_menus = [m for m in menus if m.menu_details.active]
+            print(f"\n{COLORS['CYAN']}{category}{COLORS['RESET']} ({len(active_menus)} active menus)")
+            for menu in active_menus:
+                print(f"  - {menu.name}")
+        print()
+
+    def print_help(self):
+        """Print help information"""
+        print(f"\n{COLORS['BOLD']}Menu Search Help{COLORS['RESET']}")
+        print(f"\n{COLORS['CYAN']}Commands:{COLORS['RESET']}")
+        print("1. search <query>  - Search for menus using natural language")
+        print("2. categories     - List all available menu categories")
+        print("3. help          - Show this help message")
+        print("4. quit          - Exit the program")
+        
+        print(f"\n{COLORS['CYAN']}Search Tips:{COLORS['RESET']}")
+        print("- Use natural language queries")
+        print("- Include relevant keywords")
+        print("- Try different phrasings")
+        print("- Be specific about what you're looking for")
+        
+        print(f"\n{COLORS['CYAN']}Example Queries:{COLORS['RESET']}")
+        print("- 'how to check exam results'")
+        print("- 'where are my semester marks'")
+        print("- 'show my academic performance'")
+        print()
+
+    def process_command(self, command: str) -> bool:
+        """Process user command. Returns False if should exit, True otherwise."""
+        command = command.strip()
+        
+        if not command:
+            return True
+            
+        if command.lower() in ['quit', 'exit', 'q']:
+            print(f"\n{COLORS['YELLOW']}Goodbye!{COLORS['RESET']}\n")
+            return False
+            
+        if command.lower() == 'help':
+            self.print_help()
+            return True
+            
+        if command.lower() == 'categories':
+            self.print_categories()
+            return True
+            
+        # Treat everything else as a search query
+        try:
+            results = self.search_service.search(command)
+            
+            if not results:
+                print(f"\n{COLORS['YELLOW']}No results found. Try:{COLORS['RESET']}")
+                print("- Using different keywords")
+                print("- Being more specific")
+                print("- Checking spelling")
+                print("- Type 'categories' to see available menu categories")
+                print("- Type 'help' for search tips")
+                return True
+
+            print(f"\n{COLORS['BOLD']}Found {len(results)} results:{COLORS['RESET']}")
+            for score, menu in results:
+                self.print_menu_result(score, menu)
                 
-                if query.lower() in ['quit', 'exit', 'q']:
-                    print(f"\n{COLORS['YELLOW']}Goodbye!{COLORS['RESET']}\n")
+        except Exception as e:
+            logger.error(f"Error processing command: {e}")
+            print(f"\n{COLORS['RED']}An error occurred. Please try again.{COLORS['RESET']}")
+            
+        return True
+
+    def run(self):
+        """Main CLI loop"""
+        try:
+            self.print_welcome_message()
+            
+            while True:
+                try:
+                    command = input(f"{COLORS['GREEN']}Enter search query >{COLORS['RESET']} ").strip()
+                    if not self.process_command(command):
+                        break
+                        
+                except KeyboardInterrupt:
+                    print(f"\n{COLORS['YELLOW']}Search cancelled. Type 'quit' to exit.{COLORS['RESET']}")
+                    continue
+                    
+                except EOFError:
+                    print(f"\n{COLORS['YELLOW']}Input stream closed. Exiting...{COLORS['RESET']}\n")
                     break
-                
-                if not query:
-                    continue
+                    
+        except Exception as e:
+            logger.error(f"Application error: {str(e)}")
+            print(f"\n{COLORS['RED']}An unexpected error occurred. The application will now exit.{COLORS['RESET']}\n")
+            sys.exit(1)
 
-                results = searcher.search(query)
-                
-                if not results:
-                    print(f"\n{COLORS['YELLOW']}No results found. Try:{COLORS['RESET']}")
-                    print("- Using different keywords")
-                    print("- Being more specific")
-                    print("- Checking spelling")
-                    continue
-
-                print(f"\n{COLORS['BOLD']}Found {len(results)} results:{COLORS['RESET']}")
-                for score, menu in results:
-                    searcher.print_menu_result(score, menu)
-
-            except KeyboardInterrupt:
-                print(f"\n{COLORS['YELLOW']}Search cancelled. Goodbye!{COLORS['RESET']}\n")
-                break
-            except Exception as e:
-                logger.error(f"Error during search: {e}")
-                print(f"\n{COLORS['RED']}An error occurred. Please try again.{COLORS['RESET']}\n")
-
+def main():
+    """Entry point for the CLI application"""
+    try:
+        cli = MenuSearchCLI()
+        cli.run()
     except Exception as e:
-        logger.error(f"Initialization error: {str(e)}")
-        print(f"\n{COLORS['RED']}Failed to initialize search system. Please check the logs.{COLORS['RESET']}\n")
+        logger.error(f"Failed to start application: {str(e)}")
+        print(f"\n{COLORS['RED']}Failed to start the application. Please check the logs.{COLORS['RESET']}\n")
         sys.exit(1)
 
 if __name__ == "__main__":

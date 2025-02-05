@@ -13,13 +13,13 @@
       },
       "action_terms": {
           "view": {
-              "synonyms": ["check", "see", "display", "show", "fetch", "retrieve", "access", "obtain", "get", "find", "search"]
+              "primary": "check see display show fetch retrieve access obtain get find search"
           },
           "analyze": {
-              "synonyms": ["examine", "study", "evaluate", "assess", "investigate", "inspect", "review", "calculate"]
+              "primary": "examine study evaluate assess investigate inspect review calculate"
           },
           "download": {
-              "synonyms": ["export", "save", "extract", "obtain", "acquire", "fetch", "pull", "get"]
+              "primary": "export save extract obtain acquire fetch pull get"
           }
       },
       "error_tolerant_terms": {

@@ -40,8 +40,8 @@ ENV/
 *.sublime-project
 
 # Project specific
-data/*.json
-!data/.gitkeep
+# data/*.json
+# !data/.gitkeep
 logs/
 *.log
 .coverage

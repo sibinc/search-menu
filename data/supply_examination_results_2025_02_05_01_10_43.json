@@ -1,0 +1,144 @@
+{
+    "id": "supply-examination-results",
+    "name": "Supply Examination Results",
+    "description": "View and analyze supplementary examination results for all academic programs",
+    "url": "supply-examination-results",
+    
+    "query_enhancers": {
+      "primary_terms": {
+        "examination": "exam test assessment evaluation quiz supplementary supply retry repeat",
+        "results": "marks grades scores performance outcome achievement points percentage",
+        "supply": "supplementary additional extra repeat retake second-chance makeup",
+        "academic": "educational scholastic curricular course program study semester"
+      },
+      "action_terms": {
+        "view": "check see display show fetch retrieve access obtain get find search",
+        "analyze": "examine study evaluate assess investigate inspect review calculate",
+        "download": "export save extract obtain acquire fetch pull get"
+      },
+      "error_tolerant_terms": {
+        "spelling_variations": {
+          "examination": ["exam", "examinaton", "examinetion", "exams"],
+          "supplementary": ["supply", "supplimentary", "supplementry", "suplementary"],
+          "results": ["result", "rsults", "resuts", "resultss"]
+        },
+        "common_typos": {
+          "semester": ["semster", "semister", "semestre", "semster"],
+          "supply": ["suply", "suppply", "suppy"]
+        }
+      }
+    },
+  
+    "search_metadata": {
+      "keywords": [
+        "supply exam results",
+        "supplementary examination",
+        "retry exam scores",
+        "repeat test results",
+        "makeup exam grades",
+        "second chance results",
+        "additional assessment",
+        "supply semester results",
+        "supplementary marks",
+        "retry examination",
+        "repeat assessment grades",
+        "makeup test scores",
+        "supply exam performance",
+        "supplementary evaluation"
+      ],
+      "search_phrases": {
+        "questions": [
+          "where can I find my supply exam results",
+          "how to check supplementary results",
+          "when will supply exam results be published",
+          "where are my retry exam scores",
+          "how to view supplementary marks"
+        ],
+        "commands": [
+          "show supply exam results",
+          "display supplementary marks",
+          "view retry scores",
+          "check makeup results",
+          "find supply grades"
+        ],
+        "regional_variations": {
+          "indian": [
+            "supply exam result kahan hai",
+            "supplementary ka result kaise dekhe",
+            "supply marks kahan milenge",
+            "retry result check karna hai"
+          ],
+          "international": [
+            "locate my makeup exam scores",
+            "find my supplementary grades",
+            "access retry results",
+            "view my second attempt scores"
+          ]
+        }
+      },
+      "related_terms": [
+        "academic performance",
+        "semester grades",
+        "examination scores",
+        "result publication",
+        "mark sheets",
+        "grade reports",
+        "academic evaluation",
+        "course performance",
+        "supplementary assessment",
+        "retry results"
+      ]
+    },
+  
+    "menu_details": {
+      "category": "examination",
+      "subcategory": "results",
+      "context": "Primary menu for accessing and viewing supplementary examination results across all programs",
+      "order": 1,
+      "active": true,
+      "permissions": ["student", "faculty", "exam_controller"],
+      "dependencies": {
+        "required_menus": ["exam-registration"],
+        "optional_menus": ["grade-card", "transcript"]
+      },
+      "workflow_state": {
+        "previous_states": ["exam-completed", "evaluation-completed"],
+        "next_states": ["result-published"]
+      }
+    },
+  
+    "ui_components": {
+      "icon": "clipboard-check",
+      "color_scheme": {
+        "primary": "orange-600",
+        "secondary": "gray-200"
+      },
+      "display": {
+        "desktop": {
+          "visible": true,
+          "position": "main-menu"
+        },
+        "mobile": {
+          "visible": true,
+          "position": "hamburger-menu"
+        }
+      },
+      "notifications": {
+        "enabled": true,
+        "events": ["result-published", "grade-card-available"]
+      }
+    },
+  
+    "metadata": {
+      "created_at": "2025-02-05T01:16:58Z",
+      "created_by": "sibinc",
+      "updated_at": "2025-02-05T01:16:58Z",
+      "version": "1.0",
+      "search_index_version": "1.0",
+      "last_semantic_update": "2025-02-05T01:16:58Z",
+      "usage_metrics": {
+        "search_hits": 0,
+        "access_count": 0
+      }
+    }
+  }

@@ -1,13 +1,16 @@
 # search_menu/scripts/manage_menus.py
-import click
-import json
 import os
+import sys
+import click
 from datetime import datetime
-import time
-from ..utils.menu_store import MenuStore
-from ..utils.logger import get_logger
-from ..models.menu import MenuItem
-from ..services.menu_service import MenuService
+
+# Add the project root to the Python path
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, project_root)
+
+from search_menu.utils.menu_store import MenuStore
+from search_menu.utils.logger import get_logger
+from search_menu.services.menu_service import MenuService
 
 logger = get_logger()
 
@@ -24,18 +27,21 @@ def cli():
 def create(name, description, category, url):
     """Create a new menu interactively"""
     try:
+        current_time = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')  # Current time: 2025-02-05 00:21:02
+        current_user = os.getenv('USER', 'sibinc')  # Current user: sibinc
+        
         service = MenuService()
         
         menu_data = {
-            "id": f"{category.lower()}-{int(time.time())}",
+            "id": f"{category.lower()}-{int(datetime.utcnow().timestamp())}",
             "name": name,
             "description": description,
             "url": url,
             "metadata": {
-                "created_at": datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
-                "updated_at": datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
-                "created_by": os.getenv('USER', 'unknown'),
-                "updated_by": os.getenv('USER', 'unknown'),
+                "created_at": current_time,
+                "updated_at": current_time,
+                "created_by": current_user,
+                "updated_by": current_user,
                 "version": "1.0"
             },
             "search": {

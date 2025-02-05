@@ -1,6 +1,0 @@
-2025-02-04 09:58:59 UTC - utils.logger - INFO - Search completed with 1 results
-2025-02-05 05:42:29 UTC - utils.logger - INFO - === Search Menu Application Starting ===
-2025-02-05 05:42:29 UTC - utils.logger - INFO - Application started at 2025-02-05 00:12:29 UTC
-2025-02-05 05:42:29 UTC - utils.logger - INFO - Current user: sibin
-2025-02-05 05:42:29 UTC - utils.logger - INFO - Model loaded successfully
-2025-02-05 05:42:30 UTC - utils.logger - INFO - Enhanced semantic embeddings stored in FAISS

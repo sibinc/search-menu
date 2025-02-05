@@ -12,9 +12,15 @@
         "academic": "educational scholastic curricular course program study semester"
       },
       "action_terms": {
-        "view": "check see display show fetch retrieve access obtain get find search",
-        "analyze": "examine study evaluate assess investigate inspect review calculate",
-        "download": "export save extract obtain acquire fetch pull get"
+          "view": {
+              "synonyms": ["check", "see", "display", "show", "fetch", "retrieve", "access", "obtain", "get", "find", "search"]
+          },
+          "analyze": {
+              "synonyms": ["examine", "study", "evaluate", "assess", "investigate", "inspect", "review", "calculate"]
+          },
+          "download": {
+              "synonyms": ["export", "save", "extract", "obtain", "acquire", "fetch", "pull", "get"]
+          }
       },
       "error_tolerant_terms": {
         "spelling_variations": {

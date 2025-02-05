@@ -3,7 +3,6 @@ import json
 from typing import List, Optional, Dict
 from datetime import datetime
 from pathlib import Path
-import logging
 from models.menu import MenuItem
 from config.settings import DATA_DIR
 from utils.logger import get_logger
@@ -17,55 +16,47 @@ class StorageError(Exception):
 class MenuStorage:
     def __init__(self, data_dir: Path = DATA_DIR):
         self.data_dir = data_dir
-        self.menus_file = self.data_dir / "menus.json"
-        self.enhancers_file = self.data_dir / "query_enhancers.json"
+        self.menus_dir = self.data_dir / "menus"
         self._ensure_data_dir()
 
     def _ensure_data_dir(self):
-        """Ensure data directory and files exist"""
+        """Ensure data directory exists"""
         try:
             self.data_dir.mkdir(parents=True, exist_ok=True)
-            if not self.menus_file.exists():
-                self.save_menus([])
-            if not self.enhancers_file.exists():
-                self.save_query_enhancers({})
+            self.menus_dir.mkdir(parents=True, exist_ok=True)
         except Exception as e:
             logger.error(f"Failed to initialize data directory: {e}")
             raise StorageError(f"Storage initialization failed: {e}")
 
     def load_menus(self) -> List[MenuItem]:
-        """Load menus from JSON file"""
+        """Load all menu files from the menus directory"""
         try:
-            with open(self.menus_file, 'r') as f:
-                data = json.load(f)
-                return [MenuItem(**item) for item in data]
+            menus = []
+            for file_path in self.menus_dir.glob('*.json'):
+                with open(file_path, 'r') as f:
+                    menu_data = json.load(f)
+                    menus.append(MenuItem(**menu_data))
+            return menus
         except Exception as e:
             logger.error(f"Failed to load menus: {e}")
             raise StorageError(f"Failed to load menus: {e}")
 
-    def save_menus(self, menus: List[MenuItem]):
-        """Save menus to JSON file"""
+    def save_menu(self, menu: MenuItem):
+        """Save a single menu to its own JSON file"""
         try:
-            with open(self.menus_file, 'w') as f:
-                json.dump([menu.dict() for menu in menus], f, indent=2)
+            file_path = self.menus_dir / f"{menu.id}.json"
+            with open(file_path, 'w') as f:
+                json.dump(menu.dict(), f, indent=2)
         except Exception as e:
-            logger.error(f"Failed to save menus: {e}")
-            raise StorageError(f"Failed to save menus: {e}")
+            logger.error(f"Failed to save menu: {e}")
+            raise StorageError(f"Failed to save menu: {e}")
 
-    def load_query_enhancers(self) -> Dict[str, str]:
-        """Load query enhancers from JSON file"""
+    def delete_menu(self, menu_id: str):
+        """Delete a menu file"""
         try:
-            with open(self.enhancers_file, 'r') as f:
-                return json.load(f)
+            file_path = self.menus_dir / f"{menu_id}.json"
+            if file_path.exists():
+                file_path.unlink()
         except Exception as e:
-            logger.error(f"Failed to load query enhancers: {e}")
-            raise StorageError(f"Failed to load query enhancers: {e}")
-
-    def save_query_enhancers(self, enhancers: Dict[str, str]):
-        """Save query enhancers to JSON file"""
-        try:
-            with open(self.enhancers_file, 'w') as f:
-                json.dump(enhancers, f, indent=2)
-        except Exception as e:
-            logger.error(f"Failed to save query enhancers: {e}")
-            raise StorageError(f"Failed to save query enhancers: {e}")
+            logger.error(f"Failed to delete menu: {e}")
+            raise StorageError(f"Failed to delete menu: {e}")

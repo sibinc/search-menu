@@ -55,4 +55,12 @@ LOGGING = {
             "propagate": True
         },
     }
+
+
+
 }
+
+
+# Get the project root directory
+ROOT_DIR = Path(__file__).parent.parent
+DATA_DIR = ROOT_DIR / "data"

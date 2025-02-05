@@ -16,7 +16,7 @@ def create_menu_file(prefix):
     
     # Get project root directory (one level up from scripts directory)
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    data_dir = os.path.join(project_root, "data")
+    data_dir = os.path.join(project_root, "data/menus")
     
     # Create data directory if it doesn't exist
     os.makedirs(data_dir, exist_ok=True)

@@ -1,0 +1,149 @@
+{
+    "id": "digital-valuation-report",
+    "name": "Digital Valuation Report",
+    "description": "View and manage digital valuation reports for examination assessments",
+    "url": "digital-valuation-report",
+    
+    "query_enhancers": {
+      "primary_terms": {
+        "digital": "electronic online computerized automated web-based paperless virtual",
+        "valuation": "evaluation assessment marking grading scoring examination checking",
+        "report": "document record statement analysis summary results outcome feedback"
+      },
+      "action_terms": {
+        "view": {
+          "primary": "check see display show fetch retrieve access obtain get find search"
+        },
+        "manage": {
+          "primary": "handle update modify edit control process coordinate supervise"
+        },
+        "generate": {
+          "primary": "create produce prepare make compile export download obtain"
+        }
+      },
+      "error_tolerant_terms": {
+        "spelling_variations": {
+          "valuation": ["evaluation", "valuaton", "valuasion", "valutions"],
+          "digital": ["digitl", "digtal", "degital", "digitial"],
+          "report": ["repot", "repoort", "reoprt", "rport"]
+        },
+        "common_typos": {
+          "assessment": ["assesment", "assessement", "asessment", "assesement"],
+          "examination": ["examnation", "examinetion", "examniation", "examation"]
+        }
+      }
+    },
+  
+    "search_metadata": {
+      "keywords": [
+        "digital valuation report",
+        "online assessment report",
+        "digital marking",
+        "examination evaluation",
+        "digital assessment",
+        "valuation status",
+        "exam controller report",
+        "digital evaluation system",
+        "paperless valuation",
+        "electronic marking",
+        "digital grading report",
+        "valuation feedback",
+        "assessment results",
+        "evaluation status"
+      ],
+      "search_phrases": {
+        "questions": [
+          "where can I find digital valuation reports",
+          "how to check digital evaluation status",
+          "when will valuation report be available",
+          "how to access digital assessment report",
+          "where to find examination evaluation results"
+        ],
+        "commands": [
+          "show digital valuation report",
+          "display evaluation status",
+          "view assessment results",
+          "check digital marking status",
+          "find valuation report"
+        ],
+        "regional_variations": {
+          "indian": [
+            "digital valuation report kahan hai",
+            "online evaluation status kaise dekhe",
+            "digital marking ka report",
+            "valuation status check karna hai"
+          ],
+          "international": [
+            "access digital evaluation report",
+            "find my assessment results",
+            "view digital marking status",
+            "check evaluation progress"
+          ]
+        }
+      },
+      "related_terms": [
+        "digital assessment",
+        "online evaluation",
+        "examination marking",
+        "valuation status",
+        "digital grading",
+        "assessment report",
+        "evaluation results",
+        "marking progress",
+        "digital examination",
+        "paperless assessment"
+      ]
+    },
+  
+    "menu_details": {
+      "category": "examination",
+      "subcategory": "valuation",
+      "context": "Primary menu for accessing and managing digital valuation reports for examination assessments",
+      "order": 1,
+      "active": true,
+      "permissions": ["exam_controller"],
+      "dependencies": {
+        "required_menus": ["examination-schedule", "evaluator-assignment"],
+        "optional_menus": ["result-processing", "grade-entry"]
+      },
+      "workflow_state": {
+        "previous_states": ["evaluation-in-progress", "valuation-completed"],
+        "next_states": ["result-processing"]
+      }
+    },
+  
+    "ui_components": {
+      "icon": "file-report",
+      "color_scheme": {
+        "primary": "blue-600",
+        "secondary": "gray-200"
+      },
+      "display": {
+        "desktop": {
+          "visible": true,
+          "position": "main-menu"
+        },
+        "mobile": {
+          "visible": true,
+          "position": "hamburger-menu"
+        }
+      },
+      "notifications": {
+        "enabled": true,
+        "events": ["valuation-completed", "report-generated"]
+      }
+    },
+  
+    "metadata": {
+      "created_at": "2025-02-05T03:10:11Z",
+      "created_by": "sibinc",
+      "updated_at": "2025-02-05T03:10:11Z",
+      "version": "1.0",
+      "search_index_version": "1.0",
+      "last_semantic_update": "2025-02-05T03:10:11Z",
+      "usage_metrics": {
+        "search_hits": 0,
+        "access_count": 0
+      }
+    }
+}
